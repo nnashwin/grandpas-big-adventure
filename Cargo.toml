@@ -1,12 +1,22 @@
 [package]
-name = "grandpas-big-adventure"
+name = "Grandpas big adventure"
 version = "0.1.0"
-authors = ["tyler"]
+authors = ["Tyler Boright <tyler@tylerboright.com>"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.dev]
+opt-level = 1
+
 
 [dependencies]
-cgmath = { version = "0.17", features = ["mint"]}
 ggez = "0.5"
-rand = "0.7"
+ggez-goodies = "0.5"
+euclid = {version = "0.19", features=["mint"]}
+warmy = "0.11"
+log = "0.4"
+fern = {version = "0.5", features = ["colored"] }
+chrono = "0.4"
+specs = "0.14"
+specs-derive = "0.4"
