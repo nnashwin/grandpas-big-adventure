@@ -15,6 +15,8 @@ struct TextButton {
 }
 
 pub struct TitleScene {
+    menu_idx: i32,
+    next_scene: &'static str,
     texts: BTreeMap<&'static str, TextButton>, 
     done: bool,
 }
@@ -28,8 +30,12 @@ impl TitleScene {
         texts.insert("start_button", TextButton{text: start_game_button.clone(), point: Point2::new(200.0, 300.0)});
         texts.insert("continue_button", TextButton{text: continue_button.clone(), point: Point2::new(200.0, 400.0)});
 
+        let mut menu_idx = 0;
+        let mut next_scene = "";
         let done = false;
         TitleScene {
+            menu_idx,
+            next_scene,
             texts,
             done,
         }
@@ -63,6 +69,14 @@ impl scene::Scene<World, input::Event> for TitleScene {
     }
 
     fn input(&mut self, _gameworld: &mut World, _ev: input::Event, _started: bool) {
+        let vert_axis = _gameworld.input.get_axis_raw(input::Axis::Vert);
+        
+        match _gameworld.input.get_axis_raw(input::Axis::Vert) {
+            1.0 => println!("up was pressed"),
+            -1.0 => println!("down was pressed"),
+            _ => (),
+        }
+
         if _gameworld.input.get_button_pressed(input::Button::Menu) {
             self.done = true;
         }

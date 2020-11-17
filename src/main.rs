@@ -68,7 +68,7 @@ impl event::EventHandler for MainState {
         &mut self,
         _ctx: &mut Context,
         keycode: event::KeyCode,
-        _keymod: event::KeyMods,
+        _keymod: event::KeyMods
     ) {
         if let Some(ev) = self.input_binding.resolve(keycode) {
             self.scenes.input(ev, false);
