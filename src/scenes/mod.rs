@@ -5,6 +5,7 @@ use crate::world::World;
 
 pub mod level;
 pub mod menu;
+pub mod title;
 
 // Shortcuts for our scene type.
 pub type Switch = scene::SceneSwitch<World, input::Event>;

@@ -945,21 +945,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ggez_game_template"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "euclid",
- "fern",
- "ggez",
- "ggez-goodies",
- "log",
- "specs",
- "specs-derive",
- "warmy",
-]
-
-[[package]]
 name = "gif"
 version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1142,6 +1127,21 @@ dependencies = [
  "approx",
  "rusttype 0.8.3",
  "xi-unicode",
+]
+
+[[package]]
+name = "grandpas_big_adventure"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "euclid",
+ "fern",
+ "ggez",
+ "ggez-goodies",
+ "log",
+ "specs",
+ "specs-derive",
+ "warmy",
 ]
 
 [[package]]

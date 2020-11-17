@@ -10,6 +10,8 @@ use crate::types::*;
 use std::collections::BTreeMap;
 
 pub struct MenuScene {
+    title_text: Text,
+    input_text: Text,
     texts: BTreeMap<&'static str, Text>,
     done: bool,
 }
@@ -25,6 +27,8 @@ impl MenuScene {
 
         let done = false;
         MenuScene {
+            title_text,
+            input_text,
             texts,
             done,
         }
@@ -42,12 +46,24 @@ impl scene::Scene<World, input::Event> for MenuScene {
     }
 
     fn draw(&mut self, _gameworld: &mut World, ctx: &mut ggez::Context) -> ggez::GameResult<()> {
-        for (_key, text) in &self.texts {
+        draw(
+            ctx,
+            &self.title_text,
+            DrawParam::default().dest(Point2::new(200.0,200.0)),
+        )?;
+        draw(
+            ctx,
+            &self.input_text,
+            DrawParam::default().dest(Point2::new(200.0,300.0)),
+        )?;
+
+        for (key, text) in &self.texts {
+            println!("{} : \"{:?}\"", key, text);
             draw(
                 ctx,
-                text,
-                DrawParam::default().dest(Point2::new(200.0,300.0)),
-            )?;
+                &text,
+        DrawParam::default().dest(Point2::new(200.0,300.0)),
+            )
         }
 
         Ok(())
@@ -57,7 +73,7 @@ impl scene::Scene<World, input::Event> for MenuScene {
         "MenuScene"
     }
 
-    fn input(&mut self, _gameworld: &mut World, _ev: input::Event, _started: bool) {
+    fn input(&mut self, _gameworld: &mut World, ev: input::Event, _started: bool) {
         if _gameworld.input.get_button_pressed(input::Button::Menu) {
             self.done = true;
         }
