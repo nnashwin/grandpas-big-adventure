@@ -5,6 +5,7 @@ use std::env;
 use std::path;
 
 use ggez::{self, *};
+use ggez::nalgebra::Point2;
 
 mod components;
 mod input;
@@ -15,9 +16,16 @@ mod types;
 mod util;
 mod world;
 
+struct WindowSettings {
+    is_fullscreen: bool,
+    resize_projection: bool,
+    toggle_fullscreen: bool,
+}
+
 struct MainState {
     scenes: scenes::Stack,
     input_binding: input::Binding,
+    window_settings: WindowSettings,
 }
 
 impl MainState {
@@ -30,6 +38,11 @@ impl MainState {
         Self {
             input_binding: input::create_input_binding(),
             scenes: scenestack,
+            window_settings: WindowSettings {
+                is_fullscreen: false,
+                resize_projection: false,
+                toggle_fullscreen: false,
+            },
         }
     }
 }
@@ -48,6 +61,15 @@ impl event::EventHandler for MainState {
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
         graphics::clear(ctx, graphics::Color::from((0.0, 0.0, 0.4, 0.0)));
         self.scenes.draw(ctx);
+
+        let fps = timer::fps(ctx);
+        let fps_display = graphics::Text::new(format!("FPS: {}", fps));
+
+        graphics::draw(
+            ctx,
+            &fps_display,
+            (Point2::new(50.0, 550.0), graphics::WHITE),
+        )?;
         graphics::present(ctx)
     }
 
