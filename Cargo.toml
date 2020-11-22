@@ -11,12 +11,12 @@ opt-level = 1
 
 
 [dependencies]
+chrono = "0.4"
+euclid = {version = "0.19", features=["mint"]}
+fern = {version = "0.5", features = ["colored"] }
 ggez = "0.5"
 ggez-goodies = "0.5"
-euclid = {version = "0.19", features=["mint"]}
-warmy = "0.11"
 log = "0.4"
-fern = {version = "0.5", features = ["colored"] }
-chrono = "0.4"
-specs = "0.14"
 specs-derive = "0.4"
+specs = "0.14"
+warmy = "0.11"

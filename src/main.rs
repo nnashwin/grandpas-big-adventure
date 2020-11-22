@@ -1,6 +1,3 @@
-//! Game setup and very basic main loop.
-//! All the actual work gets done in the Scene.
-
 use std::env;
 use std::path;
 
@@ -17,9 +14,7 @@ mod util;
 mod world;
 
 struct WindowSettings {
-    is_fullscreen: bool,
     resize_projection: bool,
-    toggle_fullscreen: bool,
 }
 
 struct MainState {
@@ -32,16 +27,15 @@ impl MainState {
     fn new(ctx: &mut Context, resource_path: &path::Path) -> Self {
         let world = world::World::new(resource_path);
         let mut scenestack = scenes::Stack::new(ctx, world);
-        let initial_scene = Box::new(scenes::title::TitleScene::new(ctx, &mut scenestack.world));
+        //let initial_scene = Box::new(scenes::title::TitleScene::new(ctx, &mut scenestack.world));
+        let initial_scene = Box::new(scenes::level::LevelScene::new(ctx, &mut scenestack.world));
         scenestack.push(initial_scene);
 
         Self {
             input_binding: input::create_input_binding(),
             scenes: scenestack,
             window_settings: WindowSettings {
-                is_fullscreen: false,
                 resize_projection: false,
-                toggle_fullscreen: false,
             },
         }
     }
@@ -97,6 +91,13 @@ impl event::EventHandler for MainState {
             self.scenes.world.input.update_effect(ev, false);
         }
     }
+
+    fn resize_event(&mut self, ctx: &mut Context, width: f32, height: f32) {
+        match graphics::set_screen_coordinates(ctx, graphics::Rect::new(0.0, 0.0, width, height)) {
+            Ok(()) => println!("Resized window to {} x {}", width, height),
+            Err(e) => println!("Errored out and couldn't resize window {}", e),
+        }
+    }
 }
 
 fn main() {
@@ -113,7 +114,9 @@ fn main() {
 
     let cb = ContextBuilder::new("game-template", "ggez")
         .window_setup(conf::WindowSetup::default().title("game template"))
-        .window_mode(conf::WindowMode::default().dimensions(800.0, 600.0))
+        .window_mode(conf::WindowMode::default()
+                     .dimensions(800.0, 600.0)
+                     .resizable(true))
         .add_resource_path(&resource_dir);
     let (ctx, ev) = &mut cb.build().unwrap();
 

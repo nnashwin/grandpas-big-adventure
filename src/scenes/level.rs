@@ -47,7 +47,7 @@ impl scene::Scene<World, input::Event> for LevelScene {
     fn update(&mut self, gameworld: &mut World, _ctx: &mut ggez::Context) -> scenes::Switch {
         self.dispatcher.dispatch(&mut gameworld.specs_world.res);
         if self.done {
-            scene::SceneSwitch::Pop
+            scene::SceneSwitch::Push(Box::new(scenes::menu::MenuScene::new(_ctx, gameworld)))
         } else {
             scene::SceneSwitch::None
         }
