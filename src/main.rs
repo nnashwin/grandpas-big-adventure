@@ -18,8 +18,8 @@ struct WindowSettings {
 }
 
 struct MainState {
-    scenes: scenes::Stack,
     input_binding: input::Binding,
+    scenes: scenes::Stack,
     window_settings: WindowSettings,
 }
 
@@ -28,7 +28,7 @@ impl MainState {
         let world = world::World::new(resource_path);
         let mut scenestack = scenes::Stack::new(ctx, world);
         //let initial_scene = Box::new(scenes::title::TitleScene::new(ctx, &mut scenestack.world));
-        let initial_scene = Box::new(scenes::level::LevelScene::new(ctx, &mut scenestack.world));
+        let initial_scene = Box::new(scenes::menu::MenuScene::new(ctx, &mut scenestack.world));
         scenestack.push(initial_scene);
 
         Self {
@@ -48,7 +48,6 @@ impl event::EventHandler for MainState {
             self.scenes.update(ctx);
         }
         self.scenes.world.resources.sync(ctx);
-
         Ok(())
     }
 

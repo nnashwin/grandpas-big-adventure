@@ -35,7 +35,7 @@ impl scene::Scene<World, input::Event> for MenuScene {
     fn update(&mut self, gameworld: &mut World, ctx: &mut ggez::Context) -> scenes::Switch {
         if self.done {
             self.done = false;
-            scene::SceneSwitch::Pop
+            scene::SceneSwitch::Push(Box::new(scenes::level::LevelScene::new(ctx, gameworld)))
         } else {
             scene::SceneSwitch::None
         }
@@ -57,8 +57,8 @@ impl scene::Scene<World, input::Event> for MenuScene {
         "MenuScene"
     }
 
-    fn input(&mut self, _gameworld: &mut World, _ev: input::Event, _started: bool) {
-        if _gameworld.input.get_button_pressed(input::Button::Menu) {
+    fn input(&mut self, gameworld: &mut World, _ev: input::Event, _started: bool) {
+        if gameworld.input.get_button_pressed(input::Button::Menu) {
             self.done = true;
         }
     }

@@ -14,54 +14,29 @@ use crate::world::World;
 
 pub struct LevelScene {
     done: bool,
-    kiwi: warmy::Res<resources::Image>,
-    dispatcher: specs::Dispatcher<'static, 'static>,
 }
 
 impl LevelScene {
     pub fn new(ctx: &mut ggez::Context, world: &mut World) -> Self {
         let done = false;
-        let kiwi = world
-            .resources
-            .get::<resources::Image>(&resources::Key::from_path("/images/kiwi.png"), ctx)
-            .unwrap();
-
-        let mut dispatcher = Self::register_systems();
-        dispatcher.setup(&mut world.specs_world.res);
 
         LevelScene {
             done,
-            kiwi,
-            dispatcher,
         }
-    }
-
-    fn register_systems() -> specs::Dispatcher<'static, 'static> {
-        specs::DispatcherBuilder::new()
-            .with(MovementSystem, "sys_movement", &[])
-            .build()
     }
 }
 
 impl scene::Scene<World, input::Event> for LevelScene {
     fn update(&mut self, gameworld: &mut World, _ctx: &mut ggez::Context) -> scenes::Switch {
-        self.dispatcher.dispatch(&mut gameworld.specs_world.res);
         if self.done {
-            scene::SceneSwitch::Push(Box::new(scenes::menu::MenuScene::new(_ctx, gameworld)))
+            self.done = false;
+            scene::SceneSwitch::Pop
         } else {
             scene::SceneSwitch::None
         }
     }
 
     fn draw(&mut self, gameworld: &mut World, ctx: &mut ggez::Context) -> ggez::GameResult<()> {
-        let pos = gameworld.specs_world.read_storage::<c::Position>();
-        for p in pos.join() {
-            graphics::draw(
-                ctx,
-                &(self.kiwi.borrow().0),
-                graphics::DrawParam::default().dest(p.0),
-            )?;
-        }
         Ok(())
     }
 
