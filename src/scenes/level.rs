@@ -27,16 +27,17 @@ impl LevelScene {
 }
 
 impl scene::Scene<World, input::Event> for LevelScene {
-    fn update(&mut self, gameworld: &mut World, _ctx: &mut ggez::Context) -> scenes::Switch {
+    fn update(&mut self, gameworld: &mut World, ctx: &mut ggez::Context) -> scenes::Switch {
         if self.done {
             self.done = false;
-            scene::SceneSwitch::Pop
+            scene::SceneSwitch::Push(Box::new(scenes::menu::MenuScene::new(ctx, gameworld)))
         } else {
             scene::SceneSwitch::None
         }
     }
 
     fn draw(&mut self, gameworld: &mut World, ctx: &mut ggez::Context) -> ggez::GameResult<()> {
+        graphics::clear(ctx, graphics::BLACK);
         Ok(())
     }
 
