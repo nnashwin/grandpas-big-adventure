@@ -14,8 +14,8 @@ opt-level = 1
 chrono = "0.4"
 euclid = {version = "0.19", features=["mint"]}
 fern = {version = "0.5", features = ["colored"] }
-ggez = "0.5"
-ggez-goodies = "0.5"
+ggez = "0.5.1"
+ggez-goodies = { path="../my-ggez-goodies", version = "0.5.0-rc.1" }
 log = "0.4"
 specs-derive = "0.4"
 specs = "0.14"
