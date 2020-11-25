@@ -1,4 +1,4 @@
-use crate::{components, input, resources, util};
+use crate::{input, resources, util};
 
 use log::*;
 use specs::{self, world::Builder};
@@ -20,7 +20,6 @@ impl World {
             .expect("Could not create asset store?  Does the directory exist?");
 
         let mut w = specs::World::new();
-        components::register_components(&mut w);
 
         let mut the_world = Self {
             resources: store,
@@ -32,11 +31,6 @@ impl World {
         the_world
             .specs_world
             .create_entity()
-            .with(components::Position(util::point2(0.0, 0.0)))
-            .with(components::Motion {
-                velocity: util::vec2(1.0, 1.0),
-                acceleration: util::vec2(0.0, 0.0),
-            })
             .build();
 
         the_world

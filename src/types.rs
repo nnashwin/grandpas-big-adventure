@@ -1,7 +1,5 @@
 use std::fmt;
-
-pub use ggez_goodies::Point2;
-pub use ggez_goodies::Vector2;
+pub use ggez::nalgebra::Point2;
 
 /// This is not actually used very many places,
 /// but is still useful.

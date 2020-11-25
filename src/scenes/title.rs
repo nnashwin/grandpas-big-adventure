@@ -2,7 +2,9 @@ use ggez;
 use ggez::graphics::{draw, Color, DrawParam, Font, Text, TextFragment};
 use ggez_goodies::scene;
 use log::*;
+use ggez::nalgebra::Point2;
 
+use crate::types::*;
 use crate::input;
 use crate::world::World;
 use crate::scenes;
@@ -13,7 +15,7 @@ const BTN_ARR: &'static [&'static str; 2] = &["start_button", "options_button"];
 
 #[derive(Debug)]
 struct TextButton {
-    point: Point2,
+    point: ggez::nalgebra::Point2<f32>,
     text: Text,
 }
 
@@ -103,7 +105,6 @@ impl scene::Scene<World, input::Event> for TitleScene {
         match _gameworld.input.get_axis_raw(input::Axis::Vert) {
             1.0 => {
                 // self.selected_key
-                println!("up was pressed");
                 self.menu_idx = if self.menu_idx > 0 {
                     self.menu_idx - 1
                 } else {
@@ -120,4 +121,8 @@ impl scene::Scene<World, input::Event> for TitleScene {
             self.done = true;
         }
     } 
+
+    fn text_input_event(&mut self, _ctx: &mut ggez::Context, _character: char) {
+        println!("Text input character: {}",_character);
+    }
 }

@@ -4,10 +4,11 @@ use ggez_goodies::input;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Button {
-    Select,
     Back,
+    Confirm,
     Menu,
     Quit,
+    Select,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -31,4 +32,5 @@ pub fn create_input_binding() -> input::InputBinding<Axis, Button> {
         .bind_key_to_button(KeyCode::X, Button::Back)
         .bind_key_to_button(KeyCode::Z, Button::Menu)
         .bind_key_to_button(KeyCode::Escape, Button::Quit)
+        .bind_key_to_button(KeyCode::Return, Button::Confirm)
 }

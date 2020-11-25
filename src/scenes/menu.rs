@@ -2,6 +2,7 @@ use ggez;
 use ggez::graphics::{draw, DrawParam, Font, Text};
 use ggez_goodies::scene;
 use log::*;
+use ggez::nalgebra::Point2;
 
 use crate::input;
 use crate::world::World;
@@ -61,5 +62,9 @@ impl scene::Scene<World, input::Event> for MenuScene {
         if gameworld.input.get_button_pressed(input::Button::Menu) {
             self.done = true;
         }
+    }
+
+    fn text_input_event(&mut self, _ctx: &mut ggez::Context, _character: char) {
+        println!("Text input character: {}",_character);
     }
 }

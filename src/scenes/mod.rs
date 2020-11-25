@@ -4,6 +4,7 @@ use crate::input;
 use crate::world::World;
 
 pub mod level;
+pub mod useript;
 pub mod menu;
 pub mod title;
 

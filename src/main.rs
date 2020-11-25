@@ -4,11 +4,10 @@ use std::path;
 use ggez::{self, *};
 use ggez::nalgebra::Point2;
 
-mod components;
+
 mod input;
 mod resources;
 mod scenes;
-mod systems;
 mod types;
 mod util;
 mod world;
@@ -27,8 +26,8 @@ impl MainState {
     fn new(ctx: &mut Context, resource_path: &path::Path) -> Self {
         let world = world::World::new(resource_path);
         let mut scenestack = scenes::Stack::new(ctx, world);
-        //let initial_scene = Box::new(scenes::title::TitleScene::new(ctx, &mut scenestack.world));
-        let initial_scene = Box::new(scenes::level::LevelScene::new(ctx, &mut scenestack.world));
+        let initial_scene = Box::new(scenes::title::TitleScene::new(ctx, &mut scenestack.world));
+        //let initial_scene = Box::new(scenes::useript::UserInputScene::new(ctx, &mut scenestack.world));
         scenestack.push(initial_scene);
 
         Self {
@@ -74,9 +73,9 @@ impl event::EventHandler for MainState {
         _repeat: bool,
     ) {
         if let Some(ev) = self.input_binding.resolve(keycode) {
-            self.scenes.input(ev, true);
-            self.scenes.world.input.update_effect(ev, true);
-        }
+                self.scenes.input(ev, true);
+                self.scenes.world.input.update_effect(ev, true);
+            }
     }
 
     fn key_up_event(
@@ -96,6 +95,10 @@ impl event::EventHandler for MainState {
             Ok(()) => println!("Resized window to {} x {}", width, height),
             Err(e) => println!("Errored out and couldn't resize window {}", e),
         }
+    }
+
+    fn text_input_event(&mut self, _ctx: &mut ggez::Context, _character: char) {
+        self.scenes.text_input_event(_ctx, _character);
     }
 }
 
