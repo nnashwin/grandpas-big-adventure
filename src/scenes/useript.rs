@@ -10,6 +10,19 @@ use crate::scenes;
 use crate::types::Point2;
 use crate::world::World;
 
+struct RectDim {
+    x: f32,
+    y: f32,
+    w: f32,
+    h: f32,
+}
+
+impl RectDim {
+    pub const fn new(x: f32, y: f32, w: f32, h: f32) -> Self {
+        RectDim { x, y, w, h }
+    }
+}
+
 #[derive(Debug)]
 struct TextBox {
     point: ggez::nalgebra::Point2<f32>,
@@ -58,16 +71,26 @@ impl scene::Scene<World, input::Event> for UserInputScene {
     }
 
     fn draw(&mut self, gameworld: &mut World, ctx: &mut ggez::Context) -> GameResult<()> {
-        let (width, height) = graphics::drawable_size(ctx);
+        let (drawable_width, drawable_height) = graphics::drawable_size(ctx);
         graphics::clear(ctx, graphics::BLACK);
+        let rd = RectDim::new(drawable_width / 4.0, drawable_height / 3.3, drawable_width / 2.0, drawable_height / 3.3);
+
         let rect = graphics::Mesh::new_rectangle(
             ctx,
             graphics::DrawMode::fill(),
-            graphics::Rect::new(width / 4.0, height / 3.3, width / 2.0, height / 3.3),
+            graphics::Rect::new(rd.x, rd.y, rd.w, rd.h),
             graphics::WHITE,
             )?;
 
+        let input_rect = graphics::Mesh::new_rectangle(
+            ctx,
+            graphics::DrawMode::fill(),
+            graphics::Rect::new(rd.x + 30.0, rd.y + (rd.h - 60.0), rd.w - 60.0, 30.0),
+            Color::from((50, 50, 50, 255)),
+            )?;
+
         graphics::draw(ctx, &rect, (Point2::new(0.0, 0.0),))?;
+        graphics::draw(ctx, &input_rect, (Point2::new(0.0, 0.0),))?;
         graphics::draw(
             ctx,
             &self.text_input.text,
