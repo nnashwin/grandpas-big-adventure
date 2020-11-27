@@ -1,4 +1,5 @@
 use ggez::{self, GameResult};
+use ggez::event::{KeyCode};
 use ggez::graphics::{self, Color, DrawMode, DrawParam, Font, Text, TextFragment};
 use ggez_goodies::scene;
 use log::*;
@@ -9,6 +10,22 @@ use crate::input;
 use crate::scenes;
 use crate::types::Point2;
 use crate::world::World;
+
+pub const WINDOW_COLOR: Color = Color {
+    r: 1.0,
+    g: 1.0,
+    b: 1.0,
+    a: 1.0,
+};
+
+pub const TEXT_COLOR: Color = Color {
+    r: 1.0,
+    g: 1.0,
+    b: 1.0,
+    a: 1.0,
+};
+
+const INPUT_MAX_CHAR: usize = 30;
 
 struct RectDim {
     x: f32,
@@ -23,17 +40,11 @@ impl RectDim {
     }
 }
 
-#[derive(Debug)]
-struct TextBox {
-    point: ggez::nalgebra::Point2<f32>,
-    text: Text,
-}
-
 pub struct UserInputScene {
     done: bool,
     font: Font,
     text_input_rendered: bool,
-    text_input: TextBox,
+    input_text: String,
 }
 
 impl UserInputScene {
@@ -42,19 +53,12 @@ impl UserInputScene {
         let font = Font::new(ctx, "/fonts/DejaVuSerif.ttf").unwrap(); 
 
         let text_input_rendered = false;
-        let mut text = Text::new(TextFragment{
-            text: "jkasjkjafksdjfkdsajfkjasdkfj".to_string(),
-            color: Some(graphics::BLACK),
-            font: Some(font),
-            ..Default::default()
-        });
-
-        let text_input = TextBox{point: Point2::new(200.0, 300.0), text: text};
+        let mut input_text = "".to_string();
 
         UserInputScene {
             done,
             font,
-            text_input,
+            input_text,
             text_input_rendered,
         }
     }
@@ -79,7 +83,7 @@ impl scene::Scene<World, input::Event> for UserInputScene {
             ctx,
             graphics::DrawMode::fill(),
             graphics::Rect::new(rd.x, rd.y, rd.w, rd.h),
-            graphics::WHITE,
+            WINDOW_COLOR,
             )?;
 
         let input_rect = graphics::Mesh::new_rectangle(
@@ -89,19 +93,31 @@ impl scene::Scene<World, input::Event> for UserInputScene {
             Color::from((50, 50, 50, 255)),
             )?;
 
+        let text = Text::new(TextFragment {
+            text: (self.input_text).to_string(),
+            color: Some(TEXT_COLOR),
+            font: Some(self.font),
+            ..Default::default()
+        });
+
         graphics::draw(ctx, &rect, (Point2::new(0.0, 0.0),))?;
         graphics::draw(ctx, &input_rect, (Point2::new(0.0, 0.0),))?;
         graphics::draw(
             ctx,
-            &self.text_input.text,
-            DrawParam::default().dest(self.text_input.point),
+            &text,
+            DrawParam::default().dest(Point2::new(rd.x + 38.0, rd.y + (rd.h - 54.0)),),
             )?;
         Ok(())
     }
     
     fn input(&mut self, gameworld: &mut World, ev: input::Event, _started: bool) {
+        if gameworld.input.get_button_pressed(input::Button::Delete) {
+            let mut next_str = self.input_text.to_owned();
+            next_str.pop();
+            self.input_text = next_str;
+        }
         if gameworld.input.get_button_pressed(input::Button::Confirm) {
-            println!("enter pushed")
+            println!("enter pushed");
         }
     }
 
@@ -110,14 +126,16 @@ impl scene::Scene<World, input::Event> for UserInputScene {
     }
 
     fn text_input_event(&mut self, _ctx: &mut ggez::Context, _character: char) {
-        let mut next_str = self.text_input.text.contents().to_owned();
-        next_str.push_str(&_character.to_string());
-
-        self.text_input.text = Text::new(TextFragment {
-            text: next_str,
-            color: Some(graphics::BLACK),
-            font: Some(self.font),
-            ..Default::default()
-        });
+        println!("delete is pressed: {}", ggez::input::keyboard::is_key_pressed(_ctx, KeyCode::Back));
+        match ggez::input::keyboard::is_key_pressed(_ctx, KeyCode::Back) {
+            true => (),
+            false => {
+                let mut next_str = self.input_text.to_owned();
+                if next_str.chars().count() < INPUT_MAX_CHAR {
+                    next_str.push_str(&_character.to_string());
+                    self.input_text = next_str;
+                }
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ use ggez_goodies::input;
 pub enum Button {
     Back,
     Confirm,
+    Delete,
     Menu,
     Quit,
     Select,
@@ -31,6 +32,7 @@ pub fn create_input_binding() -> input::InputBinding<Axis, Button> {
         .bind_key_to_button(KeyCode::C, Button::Select)
         .bind_key_to_button(KeyCode::X, Button::Back)
         .bind_key_to_button(KeyCode::Z, Button::Menu)
+        .bind_key_to_button(KeyCode::Back, Button::Delete)
         .bind_key_to_button(KeyCode::Escape, Button::Quit)
         .bind_key_to_button(KeyCode::Return, Button::Confirm)
 }
