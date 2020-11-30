@@ -105,16 +105,18 @@ impl event::EventHandler for MainState {
 fn main() {
     util::setup_logging();
 
+
     let resource_dir = if let Ok(manifest_dir) = env::var("CARGO_MANIFEST_DIR") {
         let mut path = path::PathBuf::from(manifest_dir);
         path.push("resources");
+        println!("Adding path {:?}", path);
         path
     } else {
         path::PathBuf::from("./resources")
     };
     println!("Resource dir: {:?}", resource_dir);
 
-    let cb = ContextBuilder::new("game-template", "ggez")
+    let cb = ContextBuilder::new("grandpas-big-adventure", "tlboright")
         .window_setup(conf::WindowSetup::default().title("game template"))
         .window_mode(conf::WindowMode::default()
                      .dimensions(800.0, 600.0)
